@@ -1,0 +1,204 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+    <link href='https://fonts.googleapis.com/css?family=Finger Paint' rel='stylesheet'>
+    <link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/innks/NanumSquareRound/master/nanumsquareround.min.css">
+    <title>MANITO : 코스피200</title>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js"></script>
+</head>
+<div class="Main-1">
+    <body id="body-pd">
+            <div class="l-navbar expander" id="navbar">
+                <nav class="nav">
+                    <div>
+                        <div class="nav__brand">
+                            <img src="{% static 'img/hamburger.png' %}" class="nav__toggle">
+                            <a href="http://localhost:8000/juju/" class="nav__logo">
+                            <span class="MANITO">MANITO</span>
+                            </a>
+                        </div>
+                        <div class="nav__list">
+                            <a href="http://localhost:8000/juju/" class="nav__link">
+                                <img src="{% static 'img/default.png' %}" class="IONIconHhomedefault" name="home-outline" class="nav__icon">
+<!--                                <ion-icon name="home-outline" class="nav__icon"></ion-icon>-->
+                                <span class="manu-list" >HOME</span>
+                            </a>
+                            <a href="" class="nav__link active">
+                                <img src="{% static 'img/pie chart fill act.png' %}"  class="Pie-chart-fill">
+<!--                                <ion-icon name="copy-outline" class="nav__icon"></ion-icon>-->
+                                <span class="manu-list-active">코스피 200</span>
+                            </a>
+                            <a href="http://localhost:8000/juju/jongmok/삼성전자/" class="nav__link">
+                                <img src="{% static 'img/kanban fill.png' %}"  class="Kanban-fill">
+                                <span class="manu-list">종목 레포트</span>
+                            </a>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+
+<!-- 코스피200 메인화면 구성 -->
+    <div class="Main-2">
+ <!-- Search 검색 기능-->
+    <p>
+        <form action="http://localhost:8000/juju/jongmok/" method="post">
+            {% csrf_token %}
+            <img src="{% static 'img/icon02.png' %}" class="search-icon02" name="search_key">
+                <input type="search" value="{{ search_key }}" class="_InputWithAddons-list"
+                       name="search_key" placeholder="관심 기업 검색">
+        </form>
+
+        <span class="last-updated02">last updated</span>
+        <img src="{% static 'img/Frame 1332.png' %}" class="coolicon02">
+        <span class="to-now02">{{ now }}</span>
+    </p>
+<!-- 현재 시간 추가 -->
+<!--    <div class="for-now02">-->
+
+
+
+    <!-- 코스피200 차트 들어갈 위치 -->
+    <fieldset class="kospi200-box">
+        <div class="price_chart">
+            <div class="Component-6">
+                <span class="pc-amonth">3개월</span>
+            </div>
+            <div class="Frame-159">
+               <canvas id="kospi200_LineChart" width="410" height="195"></canvas>
+
+            </div>
+        </div>
+
+        <div class="kospi200-info-box">
+            <div class="kospi200-info-title-box">
+                <span class="ks200-title-text">코스피200</span>
+            </div>
+            <div class="Frame-1326">
+                <div class="Frame-145">
+                    <span class="ks-jisu-value">{{ kospi200_dict.now_price }}</span>
+                </div>
+                <div class="low_high">
+                    <span class="low-amonth">3개월 최저</span>
+                    <span class="high-amonth">3개월 최고</span>
+                    <div class="Vector-6"></div>
+                    <span class="H-L-diamond-001">◆</span>
+                    <span class="H-L-diamond-002">◆</span>
+                    <span class="low-amonth-value"> {{ kospi200_dict.min_price }}</span>
+                    <span class="high-amonth-value"> {{ kospi200_dict.max_price }}</span>
+                </div>
+            </div>
+            <div class="Frame-1325">
+                <div class="yesterday_ratio"> <!-- 전일대비 -->
+                    <div class="yr_title-box">
+                        <span class="yr_title">전일대비</span>
+                    </div>
+                    <div class="Frame-198">
+                        <img src="{% static 'img/caret_up01.png' %}" id="ks200_up_down" class="yr_updown">
+                            <script>
+                            var plus = '+';
+                            var updown = '{{dict1.plus_minus}}';
+                                    if( updown == plus) {
+                                    document.getElementById('ks200_up_down').src="{% static 'img/caret_up01.png' %}";
+                                    } else {
+                                    document.getElementById('ks200_up_down').src="{% static 'img/caret_down01.png' %}";
+                                    }
+                            </script>
+                        <span class="yr-value-01">{{kospi200_dict.diff}}</span>
+                        <span class="yr-value-02">({{kospi200_dict.plus_minus}}{{kospi200_dict.per}})</span>
+                    </div>
+                </div>
+                <div class="high_ratio"> <!-- 상승종목수 -->
+                    <div class="hr_title-box">
+                        <span class="hr_title">상승종목수</span>
+                    </div>
+                    <div class="Frame-198-01">
+                        <img src="{% static 'img/caret_up01.png' %}" class="hr-up">
+                        <span class="hr-value">{{ kospi200_dict.up }}</span>
+                    </div>
+                </div>
+                <div class="low_ratio"> <!-- 하락종목수 -->
+                    <div class="lr_title-box">
+                        <span class="lr_title">하락종목수</span>
+                    </div>
+                    <div class="Frame-198-02">
+                        <img src="{% static 'img/caret_down01.png' %}" class="lr-down">
+                        <span class="lr-value">{{ kospi200_dict.down }}</span>
+                    </div>
+                </div>
+                <div class="all_ratio"> <!-- 보합종목수 -->
+                    <div class="ar_title-box">
+                        <span class="ar_title">보합종목수</span>
+                    </div>
+                    <div class="Frame-198-03">
+                        <span class="ar-value">{{ kospi200_dict.mid }}</span>
+                    </div>
+                </div>
+
+
+            </div>
+
+
+        </div>
+    </fieldset>
+    <div class="Frame-30">
+        <p>
+            <div class="button-purple">
+                <span class="button-purple-title">종목 리스트</span>
+        </p>
+            </div>
+            <fieldset class="kospi200-box-Xlarge">
+                <span class="kospi200-title-list01">종목명</span>
+                <span class="kospi200-title-list02">현재가</span>
+                <span class="kospi200-title-list03">전일비</span>
+                <span class="kospi200-title-list04">등락률</span>
+                <span class="kospi200-title-list05">거래량</span>
+                <span class="kospi200-title-list06">거래대금(백만)</span>
+                <span class="kospi200-title-list07">시가총액(억)</span>
+                <div class="kospi200-line"></div>
+                <br>
+                <div style="overflow-y: scroll; height: 550px;" > <!-- 종목 리스트 스크롤 -->
+                    <span class="kospi200-title-list"></span>
+                    <div class="jkospi-name"> <!--종목명-->
+                        {% for code_name in code_name %}{{code_name|safe}}<br>{% endfor %}
+                    </div>
+                    <div class="jkospi-price"> <!--현재가-->
+                        {% for close in close %}{{close|safe}}<br>{% endfor %}
+                    </div>
+                    <div class="jkospi-diff" > <!--전일대비-->
+                        {% for diff in diff %}{{diff|safe}}<br>{% endfor %}
+                    </div>
+                    <div class="jkospi-per" > <!--등락률-->
+                        {% for per in per %}{{per|safe}}<br>{% endfor %}
+                       </div>
+                    <div class="jkospi-volume"> <!--거래량-->
+                        {% for volume in volume %}{{volume|safe}}<br>{% endfor %}
+                    </div>
+                    <div class="jkospi-amount"> <!--거래대금-->
+                        {% for amount in amount %}{{amount|safe}}<br>{% endfor %}
+                    </div>
+                    <div class="jkospi-market_cap"> <!--시가총액-->
+                        {% for market_cap in market_cap %}{{market_cap|safe}}<br>{% endfor %}
+                    </div>
+            </div><!-- 종목 리스트 스크롤 닫힘-->
+    </div><!-- 종목 리스트 스크롤 닫힘-->
+    </fieldset>
+    <!-- JS -->
+<!--    <script src="{% static 'main.js' %}"></script>-->
+    </div>
+
+    <script>
+        var date_list = {{ date_list|safe }};
+        var close_list = {{ close_list|safe }};
+    </script>
+
+    <script src="{% static 'chart_kospi200.js' %}">
+    </script>
+
+</body>
+</html>

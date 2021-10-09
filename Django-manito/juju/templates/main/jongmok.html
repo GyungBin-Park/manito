@@ -1,0 +1,566 @@
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+    <link href='https://fonts.googleapis.com/css?family=Finger Paint' rel='stylesheet'>
+    <link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/innks/NanumSquareRound/master/nanumsquareround.min.css">
+    <title>MANITO : 종목 레포트</title>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js">
+    </script>
+
+</head>
+<div class="Main-1">
+    <body id="body-pd">
+            <div class="l-navbar expander" id="navbar">
+                <nav class="nav">
+                    <div>
+                        <div class="nav__brand">
+                            <img src="{% static 'img/hamburger.png' %}" id="nav-toggle" class="nav__toggle">
+                            <a href="http://localhost:8000/juju/" class="nav__logo">
+                            <span class="MANITO">MANITO</span>
+                            </a>
+                        </div>
+                        <div class="nav__list">
+                            <a href="http://localhost:8000/juju/" class="nav__link">
+                                <img src="{% static 'img/default.png' %}" name="home-outline" class="nav__icon">
+<!--                                <ion-icon name="home-outline" class="nav__icon"></ion-icon>-->
+                                <span class="manu-list" >HOME</span>
+                            </a>
+                            <a href="http://localhost:8000/juju/kospi200_page/" class="nav__link">
+                                <img src="{% static 'img/pie chart fill.png' %}" class="Pie-chart-fill">
+<!--                                <ion-icon name="copy-outline" class="nav__icon"></ion-icon>-->
+                                <span class="manu-list">코스피 200</span>
+                            </a>
+                            <a href="" class="nav__link active">
+                                <img src="{% static 'img/kanban fill act.png' %}" class="Kanban-fill">
+                                <span class="manu-list-active">종목 레포트</span>
+                            </a>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+
+<!-- 종목 레포트 메인화면 구성 -->
+    <div class="Main-3">
+    <!-- Search 검색 기능-->
+    <p>
+        <form action="http://localhost:8000/juju/jongmok/" method="post">
+        {% csrf_token %}
+        <img src="{% static 'img/icon02.png' %}" class="search-icon02" name="search_key">
+            <input type="search" name="search_key" value="{{ search_key }}"
+                   class="_InputWithAddons-list"  placeholder="관심 기업 검색">
+
+        <span class="last-updated03">last updated</span>
+        <img src="{% static 'img/Frame 1332.png' %}" class="coolicon03">
+        <span class="to-now03">{{ now }}</span>
+        </form>
+    </p>
+    <!-- 현재 시간 추가 -->
+<!--    <div class="for-now03">-->
+
+        <!-- 종목별 간단한 요약 정보 들어갈 위치 -->
+        <div class="jongmok-box-large">
+            <div class="jm-price_now">
+                <img src="{% static 'img/jm-circle.png' %}">
+                <span class="price-real-title">현재가</span>
+
+                <div class="jm-price-now-value-box">
+                    <span class="price-real-now-value01">{{now_price}}</span>
+                    <img src="{% static 'img/stop.PNG' %}" class="prnv-updown" id="jm-diff-updown">
+                        <script>
+                            var value = 0;
+                            var updown = {{diff}};
+                                    if(updown > value) {
+                                    document.getElementById('jm-diff-updown').src="{% static 'img/caret_up01.png' %}";
+                                    } else if (updown < value) {
+                                    document.getElementById('jm-diff-updown').src="{% static 'img/caret_down01.png' %}";
+                                    } else {
+                                    document.getElementById('jm-diff-updown').src="{% static 'img/stop.PNG' %}";
+                                    }
+                        </script>
+                    <span class="price-real-now-value02">{{diff}}</span>
+                </div>
+                    <div class="jm-all-stock-info">
+                        <span class="stock-name" style="line-height:25%;"><br>{{myCode.code_name}}
+                            <br>
+                            <span style="line-height:330%;" class="stock-code"> {{myCode.code_num}}
+                            <span class="stock-upjong">{{myCode.sector}}</span>
+                            </span>
+                        </span>
+                    </div>
+            <div class="opinion-box01">
+                <div class="opinion_title01">
+                    <span class="opinion_title-text01">등락률</span>
+                    <div class="opinion-frame01">
+                        <img src="{% static 'img/stop.PNG' %}" class="jmper-updown" id="jm-per-updown">
+                            <script>
+                                var value = 0;
+                                var updown = {{diff}};
+                                        if(updown > value) {
+                                        document.getElementById('jm-per-updown').src="{% static 'img/graph_up.png' %}";
+                                        } else if (updown < value) {
+                                        document.getElementById('jm-per-updown').src="{% static 'img/graph_down.png' %}";
+                                        } else {
+                                        document.getElementById('jm-per-updown').src="{% static 'img/stop.PNG' %}";
+                                        }
+                            </script>
+                        <span class="jmper-value">{{plus_minus}}{{per}}%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="opinion-box02">
+                <div class="opinion_title02">
+                    <span class="opinion_title-text02">주가 총액</span>
+                </div>
+                <p class="jmtotal-textbox">
+                <span class="jmtotal-value">{{rank}}<span class="jmtotal-text">위</span></span>
+                </p>
+
+            </div>
+            <div class="opinion-box03">
+                <div class="opinion_title03">
+                    <span class="opinion_title-text03">투자 의견</span>
+                </div>
+                <p class="jmopi-textbox">
+                    <img src="{% static 'img/bell.png' %}" class="experimental-happy">
+                    <span class="jmopi-text" id="suggest">매수 추천</span>
+                        <script>
+                            var two = 2;
+                            var four = 4;
+                            var sugge = {{concensus_now.opinion}};
+                                if(sugge <= two) {
+                                document.getElementById('suggest').innerText = "매도 추천";
+                                document.getElementById('suggest').innerHTML = "매도 추천";
+                                } else if (sugge >= four) {
+                                document.getElementById('suggest').innerText = "매수 추천";
+                                document.getElementById('suggest').innerHTML = "매수 추천";
+                                }else {
+                                document.getElementById('suggest').innerText = "보유 추천";
+                                document.getElementById('suggest').innerHTML = "보유 추천";
+                                }
+                        </script>
+                </p>
+            </div>
+            </div> <!-- 요약 박스 전체 컨테인 jongmok-box-large 닫힘 -->
+        </div>
+
+        <!-- 주가 정보 / 종목 분석 반응형 탭 -->
+        <div class="tab_content_box">
+            <input type="radio" name="tabmenu1" id="tab1" checked>
+            <label for="tab1" class="tab-title">종목 분석</label>
+            <input type="radio" name="tabmenu1" id="tab2" >
+            <label for="tab2" class="tab-title">경쟁사 비교</label>
+
+            <!-- 종목 분석 컨텐츠 박스 -->
+            <div class="cobox con1">
+                <span class="KSE-KRW">** {{now}} KST. 20분 지연됨; KSE. KRW 통화</span>
+                <div class="jm-chart">
+                    <!-- 종목 주가차트 탭 기간별 설정 -->
+                    <div class="tab_content_jm">
+                        <input type="radio" name="tabmenu3" id="sab001" checked>
+                        <input type="radio" name="tabmenu3" id="sab002">
+                        <input type="radio" name="tabmenu3" id="sab003">
+                        <input type="radio" name="tabmenu3" id="sab004">
+                        <input type="radio" name="tabmenu3" id="sab005">
+
+                        <div class="boxx con001"> <!-- 1일 그래프 -->
+                            <canvas id="day1_LineChart" width="480" height="300"></canvas>
+                        </div>
+
+                        <div class="boxx con002"> <!-- 1주일 그래프 -->
+                            <canvas id="day7_LineChart" width="480" height="300"></canvas>
+                        </div>
+                        <div class="boxx con003"> <!-- 1개월 그래프 -->
+                            <canvas id="month1_LineChart" width="480" height="300"></canvas>
+                        </div>
+                        <div class="boxx con004"> <!-- 3개월 그래프 -->
+                            <canvas id="month3_LineChart" width="480" height="300"></canvas>
+                        </div>
+                        <div class="boxx con005"> <!-- 1년 그래프 -->
+                            <canvas id="year1_LineChart" width="480" height="300"></canvas>
+                        </div>
+                        <div class="btnn"> <!-- 기간별 반응형 탭 -->
+                            <label for="sab001" class="tab-title3" id="tab_aday" onclick="func1()">1일</label>
+                            <label for="sab002" class="tab-title3" id="tab_aweek" onclick="func2()">1주일</label>
+                            <label for="sab003" class="tab-title3" id="tab_amonth" onclick="func3()">1개월</label>
+                            <label for="sab004" class="tab-title3" id="tab_threemonths" onclick="func4()">3개월</label>
+                            <label for="sab005" class="tab-title3" id="tab_ayear" onclick="func5()">1년</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="jm-box" > <!-- 평균주가 관련 컨테이너 -->
+                    <div class="jm-date">
+                        <img src="{% static 'img/calendar.png' %}" class="calendear-jm">
+                        <span class="jm-date-text" id="tab_redate">{{ day1_list.5 }} ~ {{day1_list.6}}</span>
+                    </div>
+
+                    <div class="jm-juga">
+                        <div class="jm-juga-text01-box"><span class="jm-juga-text01">평균 주가</span></div>
+                        <p class="jm-juga-text02-box">
+                        <span class="jm-juga-text02" id="tab_result">{{ day1_list.2 }}</span>
+                            <script>
+                                function func1(){   <!-- 1일 원클릭 함수 -->
+                                document.getElementById("tab_result").innerText = '{{ day1_list.2 }}' ; <!-- 평균주가 -->
+                                document.getElementById("tab_result").innerHTML = '{{ day1_list.2 }}' ;
+                                document.getElementById("tab_result-low").innerText = "{{ day1_list.4 }}"; <!-- 최저주가 -->
+                                document.getElementById("tab_result-low").innerHTML = "{{ day1_list.4 }}";
+                                document.getElementById("tab_result-high").innerText = "{{ day1_list.3 }}"; <!-- 최고주가 -->
+                                document.getElementById("tab_result-high").innerHTML = "{{ day1_list.3 }}";
+                                document.getElementById("tab_redate").innerText = " {{ day1_list.5 }} ~ {{day1_list.6}}"; <!-- 기간 -->
+                                document.getElementById("tab_redate").innerHTML = " {{ day1_list.5 }} ~ {{day1_list.6}}";
+                                }
+                                function func2(){ <!-- 1주일 원클릭 함수 -->
+                                document.getElementById("tab_result").innerText = '{{mean_price_day7}}' ; <!-- 평균주가 -->
+                                document.getElementById("tab_result").innerHTML = '{{mean_price_day7}}' ;
+                                document.getElementById("tab_result-low").innerText = '{{min_price_day7}}' ; <!-- 최저주가 -->
+                                document.getElementById("tab_result-low").innerHTML = '{{min_price_day7}}' ;
+                                document.getElementById("tab_result-high").innerText = '{{max_price_day7}}' ; <!-- 최고주가 -->
+                                document.getElementById("tab_result-high").innerHTML = '{{max_price_day7}}' ;
+                                document.getElementById("tab_redate").innerText = "{{day7_list.6}} ~ {{day7_list.7}}" ;
+                                document.getElementById("tab_redate").innerHTML = "{{day7_list.6}} ~ {{day7_list.7}}" ;
+                                }
+                                function func3(){ <!-- 1개월 원클릭 함수 -->
+                                document.getElementById("tab_result").innerText = '{{mean_price_month}}' ;
+                                document.getElementById("tab_result").innerHTML = '{{mean_price_month}}' ;
+                                document.getElementById("tab_result-low").innerText = '{{min_price_month}}' ;
+                                document.getElementById("tab_result-low").innerHTML = '{{min_price_month}}' ;
+                                document.getElementById("tab_result-high").innerText = '{{max_price_month}}' ;
+                                document.getElementById("tab_result-high").innerHTML = '{{max_price_month}}' ;
+                                document.getElementById("tab_redate").innerText = "{{month1_list.6}} ~ {{month1_list.7}}" ;
+                                document.getElementById("tab_redate").innerHTML = "{{month1_list.6}} ~ {{month1_list.7}}" ;
+                                }
+                                function func4(){ <!-- 3개월 원클릭 함수 -->
+                                document.getElementById("tab_result").innerText =  '{{mean_price_month3}}' ;
+                                document.getElementById("tab_result").innerHTML =  '{{mean_price_month3}}' ;
+                                document.getElementById("tab_result-low").innerText = '{{min_price_month3}}' ;
+                                document.getElementById("tab_result-low").innerHTML = '{{min_price_month3}}' ;
+                                document.getElementById("tab_result-high").innerText =  '{{max_price_month3}}' ;
+                                document.getElementById("tab_result-high").innerHTML =  '{{max_price_month3}}' ;
+                                document.getElementById("tab_redate").innerText = "{{month3_list.6}} ~ {{month3_list.7}}" ;
+                                document.getElementById("tab_redate").innerHTML = "{{month3_list.6}} ~ {{month3_list.7}}" ;
+                                }
+                                function func5(){ <!-- 1년 원클릭 함수 -->
+                                document.getElementById("tab_result").innerText = '{{mean_price_year}}' ;
+                                document.getElementById("tab_result").innerHTML = '{{mean_price_year}}' ;
+                                document.getElementById("tab_result-low").innerText = '{{min_price_year}}' ;
+                                document.getElementById("tab_result-low").innerHTML = '{{min_price_year}}' ;
+                                document.getElementById("tab_result-high").innerText = '{{max_price_year}}' ;
+                                document.getElementById("tab_result-high").innerHTML = '{{max_price_year}}' ;
+                                document.getElementById("tab_redate").innerText = "{{year1_list.6}} ~ {{year1_list.7}}" ;
+                                document.getElementById("tab_redate").innerHTML = "{{year1_list.6}} ~ {{year1_list.7}}" ;
+                                }
+                            </script>
+                        <span class="jm-juga-text03">원</span>
+                        </p>
+                            <span class="jm-juga-text04"><br><br>최저&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;최고</span>
+                            <div class="H-L-line"></div>
+                                <span class="H-L-diamond-01">◆</span>
+                                <span class="H-L-diamond-02">◆</span>
+                            <span class="jm-juga-text04-01" id="tab_result-low">{{ day1_list.4 }}</span>
+                            <span class="jm-juga-text04-02" id="tab_result-high">{{ day1_list.3 }}</span>
+                    </div>
+                    <hr class="jm-juga-line" align="center" >
+                    <div class="jm-total-fix">
+                        <span class="jm-juga-text05-01-box"><span class="jm-juga-text05-01">&nbsp;2020년 대비</span></span>
+                        <span class="jm-juga-text05-02-box"><span class="jm-juga-text05-02">업종 내 순위</span></span>
+                        <span class="jm-juga-text05-03-box"><span class="jm-juga-text05-03" >매출액</span></span>
+                    <div class="all-contain"> <!-- 요약박스 3개 컨테인 -->
+                        <div class="all-jm1"> <!-- 0000년 대비 요약 박스 -->
+<!-- per 데이터에 따라 이미지랑 상승,하락 변경하기 -->
+                            <img src="{% static 'img/graph_up.png' %}" class="Graph-up" id="per2020-updown">
+                                <script>
+                                    var value = 0;
+                                    var updown = {{per_2020}};
+                                            if(updown > value) {
+                                            document.getElementById('per2020-updown').src="{% static 'img/graph_up.png' %}";
+                                            } else {
+                                            document.getElementById('per2020-updown').src="{% static 'img/graph_down.png' %}";
+                                            }
+                                </script>
+
+                            <span class="all-jm-text01"> {{per_2020}}%</span>
+                            <span class="all-jm-text02" id="per2020-text">상승</span>
+                                <script>
+                                    var value = 0;
+                                    var updown = {{per_2020}};
+                                            if(updown > value) {
+                                            document.getElementById('per2020-text').innerText = "상승";
+                                            document.getElementById('per2020-text').innerHTML = "상승";
+                                            } else {
+                                            document.getElementById('per2020-text').innerText = "하락";
+                                            document.getElementById('per2020-text').innerHTML = "하락";
+                                            }
+                                </script>
+
+                        </div>
+                        <div class="all-jm2" style="line-height:100%;"> <!-- 업종 내 순위 요약 박스 -->
+                            <br>
+                            <span class="all-jm-text03">{{sector_rank}}</span>
+                            <span class="all-jm-text04">위</span>
+                        </div>
+                        <div class="all-jm3" style="line-height:100%;"> <!-- 매출액 순위 요약 박스 -->
+                            <br>
+                            <span class="all-jm-text05">{{sale_rank}}</span>
+                            <span class="all-jm-text06">위</span>
+                        </div>
+                    </div>
+                    </div> <!-- 그대로 냅둬야하는 중요한 닫힘 -->
+                </div>
+
+                <!-- 포괄손익계산서 / 재무상태표 반응형 탭 -->
+                    <div class="tab_content">
+                        <input type="radio" name="tabmenu2" id="tab01" checked>
+                        <label for="tab01" class="tab-title2">포괄손익계산서</label>
+                        <input type="radio" name="tabmenu2" id="tab02">
+                        <label for="tab02" class="tab-title2">&nbsp;&nbsp;&nbsp;&nbsp;재무상태표&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <div class="box con01"> <!-- 포괄손익 그래프 -->
+                                <canvas id="f_summary_1_chart" width="350" height="365"></canvas>
+                            </div>
+                            <div class="box con02"> <!-- 재무상태표 그래프 -->
+                                <canvas id="f_summary_2_chart" width="350" height="365"></canvas>
+                            </div>
+                    </div>
+                    <!-- 마니또 의견 -->
+                    <fieldset class="jongmok-box-Xlarge-02">
+                    <div>
+                        <p>
+                            <span class="manito-butt">
+                                <img src="{% static 'img/Heart half.png' %}" class="manito-heart">
+                                <span class="manito-info">마니또 의견</span>
+                            </span>
+                        </p>
+                    </div>
+                        <p class="manito-title-all">
+                        <span class="Short-term">Short term</span>
+                        <span class="Forcasting-chart">예측 차트</span>
+
+                        </p>
+                        <div class="manito-Short-term-box">
+                            <canvas id="manito_Chart" width="630" height="320"></canvas>
+                        </div>
+                        <div class="manito-Forcasting-chart-box">
+                            <span class="DSFC-date">Date</span>
+                            <span class="DSFC-value">실제 종가</span>
+                            <span class="DSFC-low">예측 종가</span>
+                            <br>
+                            <div style="overflow-y: scroll; height: 280px;" > <!-- 종목 리스트 스크롤 -->
+                                <div class="JMDS-date"> <!--Date-->
+                                    {% for manito_date in manito_date %}{{manito_date|safe}}<br>{% endfor %}
+                                </div>
+                                <div class="JMDS-y"> <!--실제-->
+                                    {% for manito_y in manito_y %}{{manito_y|safe}}<br>{% endfor %}
+                                </div>
+                                <div class="JMDS-yhat" > <!--예측-->
+                                    {% for manito_yhat in manito_yhat %}{{manito_yhat|safe}}<br>{% endfor %}
+                                </div>
+                            </div>
+                        </div>
+
+                    </fieldset>
+                </div> <!-- 종목 정보 반응형 컨테이너  닫힘-->
+
+            <!-- 종목 비교 컨텐츠 박스 -->
+            <div class="cobox con2">
+                <div class="tab_content-MD"> <!-- 매출액/당기순이익 컨텐츠 박스-->
+                    <input type="radio" name="tabmenu-MD" id="tabMD01" checked>
+                    <label for="tabMD01" class="tab-title-MD">&nbsp;&nbsp;&nbsp;&nbsp;매출액&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                    <input type="radio" name="tabmenu-MD" id="tabMD02">
+                    <label for="tabMD02" class="tab-title-MD">당기순이익</label>
+
+                    <div class="MDbox conMD01">
+                        <div>
+                        {% if sector_num == 3 %}
+                            <canvas id="sale_compare_Chart3" width="90" height="60"></canvas>
+                        {% elif sector_num == 2 %}
+                            <canvas id="sale_compare_Chart2" width="90" height="60"></canvas>
+                        {% else %}
+                            <canvas id="sale_compare_Chart1" width="90" height="60"></canvas>
+                        {% endif %}
+                            </div>
+                    </div>
+
+                    <div class="MDbox conMD02">
+                        {% if sector_num == 3 %}
+                            <canvas id="ni_compare_Chart3" width="90" height="60"></canvas>
+                        {% elif sector_num == 2 %}
+                            <canvas id="ni_compare_Chart2" width="90" height="60"></canvas>
+                        {% else %}
+                            <canvas id="ni_compare_Chart1" width="90" height="60"></canvas>
+                        {% endif %}
+                    </div>
+
+
+                </div><!-- 매출액/당기순이익 컨텐츠 박스 닫힘 -->
+
+                <div class="tab_content-PR"> <!-- PER/ROE 컨텐츠 박스-->
+                    <input type="radio" name="tabmenu-PR" id="tabPR01" checked>
+                    <label for="tabPR01" class="tab-title-PR">PER</label>
+                    <input type="radio" name="tabmenu-PR" id="tabPR02">
+                    <label for="tabPR02" class="tab-title-PR">ROE</label>
+
+                    <div class="PRbox conPR01">
+                        {% if sector_num == 3 %}
+                            <canvas id="per_compare_Chart3" width="90" height="60"></canvas>
+                        {% elif sector_num == 2 %}
+                            <canvas id="per_compare_Chart2" width="90" height="60"></canvas>
+                        {% else %}
+                            <canvas id="per_compare_Chart1" width="90" height="60"></canvas>
+                        {% endif %}
+                    </div>
+
+                    <div class="PRbox conPR02">
+                        {% if sector_num == 3 %}
+                            <canvas id="roe_compare_Chart3" width="90" height="60"></canvas>
+                        {% elif sector_num == 2 %}
+                            <canvas id="roe_compare_Chart2" width="90" height="60"></canvas>
+                        {% else %}
+                            <canvas id="roe_compare_Chart1" width="90" height="60"></canvas>
+                        {% endif %}
+                    </div>
+
+
+                </div> <!-- PER/ROE 컨텐츠 박스 닫힘 -->
+
+                <!-- 증권사 투자 의견 -->
+                <fieldset class="jongmok-box-cc-03">
+                    <div>
+                        <span class="manito-butt-cc">
+                            <span class="manito-butt-cc-text">중권사 투자 의견</span>
+                        </span>
+                    </div>
+                    <!-- 증권사 투자 의견 첫번째 박스 -->
+                    <div class="jm-cc-box1">
+                    <img src="{% static 'img/middle03.png' %}" class="tooja_img" id="tooja_img">
+                        <script> <!-- 증권사 투자 점수에 따른 자바 if문  -->
+                            var one = 1;
+                            var two = 2;
+                            var three = 3;
+                            var four = 4;
+                            var infoscore = {{concensus_now.opinion}};
+                                    if(infoscore <= one) {
+                                    document.getElementById('tooja_img').src="{% static 'img/left01.png' %}";
+                                    } else if (infoscore <= two) {
+                                    document.getElementById('tooja_img').src="{% static 'img/left02.png' %}";
+                                    } else if (infoscore <= three) {
+                                    document.getElementById('tooja_img').src="{% static 'img/middle03.PNG' %}";
+                                    } else if (infoscore <= four) {
+                                    document.getElementById('tooja_img').src="{% static 'img/right04.PNG' %}";
+                                    } else {
+                                    document.getElementById('tooja_img').src="{% static 'img/right05.PNG' %}";
+                                    }
+                        </script>
+
+
+
+
+
+
+                    <div class="consensus-info-box">
+                        <p>
+                            <div class="Frame-info-box01"><span class="C-info-title01">투자 의견</span></div>
+                            <div class="Frame-info-box02"><span class="C-info-title02">목표 주가</span></div>
+                            <div class="Frame-info-box03"><span class="C-info-title03">EPS</span></div>
+                            <div class="Frame-info-box04"><span class="C-info-title04">PER</span></div>
+                            <div class="Frame-info-box05"><span class="C-info-title05">추정 기관수</span></div>
+                        </p>
+                        <p>
+                            <div class="Frame-value-box01"><span class="C-info-value01"> {{concensus_now.opinion}}</span></div>
+                            <div class="Frame-value-box02"><span class="C-info-value02"> {{ concensus_now.goal }}</span></div>
+                            <div class="Frame-value-box03"><span class="C-info-value03">{{concensus_now.eps}}</span></div>
+                            <div class="Frame-value-box04"><span class="C-info-value04">{{concensus_now.per}}</span></div>
+                            <div class="Frame-value-box05"><span class="C-info-value05"> {{ concensus_now.inst_nm }}</span></div>
+                        </p>
+
+                        <div class="mini_report">
+                            <img src="{% static 'img/Book half.png' %}" class="report_book">
+                            <span><hr style="border:solid 1px #dedcdc; height:60px;margin: -45px 0px 0px 48px;position:absolute;"></span>
+
+                            <span class="text-report-ex" style="line-height:70%;"><span class="text-report-data">{{ concensus_now.inst_nm }}개</span>의                               증권사 평균 의견은
+                                <span class="text-report-data">{{concensus_now.opinion}}점
+                                    <span class="text-report-data" id="ccsus_opin">(보유 추천)</span>입니다.
+                                    <script>
+                                            var two = 2;
+                                            var four = 4;
+                                            var sugge = {{concensus_now.opinion}};
+                                                if(sugge <= two) {
+                                                document.getElementById('ccsus_opin').innerText = "(매도 추천)";
+                                                document.getElementById('ccsus_opin').innerHTML = "(매도 추천)";
+                                                } else if (sugge >= four) {
+                                                document.getElementById('ccsus_opin').innerText = "(매수 추천)";
+                                                document.getElementById('ccsus_opin').innerHTML = "(매수 추천)";
+                                                }else {
+                                                document.getElementById('ccsus_opin').innerText = "(보유 추천)";
+                                                document.getElementById('ccsus_opin').innerHTML = "(보유 추천)";
+                                                }
+                                        </script>
+                                </span>
+                                <br><br>
+                                목표 주가는
+                                <span class="text-report-data">{{ concensus_now.goal }}원</span>이며,
+                                당기순이익 대비 주식가치는
+                                <span class="text-report-data">{{concensus_now.per}}배</span>입니다.
+                                <br><br>
+                                <span class="text-report-data">{{myCode.code_name}}</span> 주식 1장이
+                                <span class="text-report-data">{{concensus_now.eps}}원</span>을 벌었습니다.
+                            </span>
+                        </div>
+                    </div><!-- 컨센서스 인포 박스 닫힘 -->
+                    </div> <!-- 증권사 투자 의견 첫번째 박스 닫힘-->
+                    <div class="jm-cc-box2"> <!-- 증권사 투자 의견 두번째 박스 -->
+                        <canvas id="concensus_chart" width="490" height="360"></canvas>
+                    </div><!-- 증권사 투자 의견 두번째 박스 닫힘 -->
+                </fieldset>
+            </div> <!-- 종목 비교 컨텐츠 박스 닫힘-->
+        </div> <!-- 주가 정보/종목분석 반응형 컨테이너 닫힘 -->
+        </div> <!-- main-3 닫힘 -->
+
+<!-- JS 연동 및 뷰뷰 -->
+    <script>
+    var day1_list = {{ day1_list|safe }};
+
+
+    var day7_list = {{ day7_list|safe }};
+    var month1_list = {{ month1_list|safe }};
+    var month3_list = {{ month3_list | safe }};
+    var year1_list = {{ year1_list | safe }};
+    var f_summary_list = {{ f_summary_list | safe }};
+
+    var compare_date = {{ compare_date|safe }};
+    var result_compare_list = {{ result_compare_list | safe }};
+    var sector_num = {{sector_num}};
+
+    var concensus_date = {{ concensus_dict.date | safe }};
+    var concensus_target_prc = {{ concensus_dict.target_prc | safe }};
+    var concensus_recom_cd = {{ concensus_dict.recom_cd | safe }};
+    var concensus_inst_nm = {{ concensus_dict.inst_nm | safe }};
+    var concensus_index_end = {{ concensus_dict.index_end | safe }};
+    var concensus_close = {{ concensus_dict.close | safe }};
+
+    var manito_list = {{ manito_list | safe }};
+
+    </script>
+
+
+    <!--    <script src="{% static 'main.js' %}"></script>-->
+    <script src="{% static 'chart_date_price.js' %}"></script>
+    <script src="{% static 'chart_f_summary.js' %}"></script>
+
+    <script src="{% static 'chart_sale.js' %}"></script>
+    <script src="{% static 'chart_ni.js' %}"></script>
+    <script src="{% static 'chart_per.js' %}"></script>
+    <script src="{% static 'chart_roe.js' %}"></script>
+
+    <script src="{% static 'chart_concensus.js' %}"></script>
+    <script src = "{% static 'chart_manito.js' %}"></script>
+
+
+
+</body>
+</html>

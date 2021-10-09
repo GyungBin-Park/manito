@@ -1,0 +1,267 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" xmlns:input="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- CSS 및 구글 폰트 -->
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+    <link href='https://fonts.googleapis.com/css?family=Finger Paint' rel='stylesheet'>
+    <link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/innks/NanumSquareRound/master/nanumsquareround.min.css">
+    <title>MANITO</title>
+
+</head>
+
+    <body id="body-pd">
+            <div class="l-navbar" id="navbar">
+                <nav class="nav">
+                    <div>
+                        <div class="nav__brand">
+                            <img src="{% static 'img/hamburger.png' %}"  id="nav-toggle" class="nav__toggle">
+                            <a href="" class="nav__logo">
+                            <span class="MANITO">MANITO</span>
+                            </a>
+                        </div>
+                        <div class="nav__list">
+                            <a href="" class="nav__link active">
+                                <img src="{% static 'img/default act.png' %}" class="IONIconHhomedefault" name="home-outline" class="nav__icon">
+                                <span class="manu-list-active" >HOME</span>
+                            </a>
+                            <a href="kospi200_page/" class="nav__link">
+                                <img src="{% static 'img/pie chart fill.png' %}"  class="Pie-chart-fill" class="nav__icon">
+                                <span class="manu-list">코스피 200</span>
+                            </a>
+                            <a href="jongmok/삼성전자/" class="nav__link">
+                                <img src="{% static 'img/kanban fill.png' %}"  class="Kanban-fill" class="nav__icon">
+                                <span class="manu-list">종목 레포트</span>
+                            </a>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+    <!-- 메인 크롤링 데이터 연동할 부분-->
+        <div class="main-view">
+            <div class="for-now"> <!-- 현재 시간 추가 -->
+                <span class="last-updated" style="line-height:5%">last updated</span><br>
+                <img src="{% static 'img/Frame 1332@2x.png' %}" class="coolicon">
+                <span class="to-now">{{ now }}</span>
+            </div>
+            <div class="jisu-total">
+                <span class="jisu-list1">코스피</span><span class="jisu-list2">코스닥</span><span class="jisu-list3">나스닥</span>
+                <!-- 코스피 / 코스닥 / 나스닥 주가 데이터-->
+                <div>
+                        <span class="jisu-value-1" >{{dict1.now_price}}</span>
+                        <img src="../static/img/caret_upex.png" id="ks_up_down" class="updown_ex">
+                    <!-- 데이터에 따라 변화하는 이미지 자바스크립 if문 -->
+                        <script>
+                        var plus = '+';
+                        var updown = '{{dict1.plus_minus}}';
+                                if( updown == plus) {
+                                document.getElementById('ks_up_down').src="../static/img/caret_upex.png";
+                                } else {
+                                document.getElementById('ks_up_down').src="../static/img/caret_downex.png";
+                                }
+                        </script>
+                        <span class="jisu-value-01">{{dict1.diff}}</span>
+                        <span class="jisu-value-01">({{dict1.plus_minus}}{{dict1.per}})</span>
+                        <span class="jisu-value-2">{{dict2.now_price}}</span>
+                        <img src="../static/img/caret_upex.png" id="kd_up_down" class="updown_ex">
+                        <script>
+                        var plus = '+';
+                        var updown = '{{dict2.plus_minus}}';
+                                if( updown == plus) {
+                                document.getElementById('kd_up_down').src="../static/img/caret_upex.png";
+                                } else {
+                                document.getElementById('kd_up_down').src="../static/img/caret_downex.png";
+                                }
+                        </script>
+
+                        <span class="jisu-value-02">{{dict2.diff}}</span>
+                        <span class="jisu-value-01">({{dict2.plus_minus}}{{dict2.per}})</span>
+
+                        <span class="jisu-value-3">{{dict3.now_price}}</span> <!-- 나스작 지수 -->
+                        <img src="../static/img/caret_upex.png" id="ns_up_down" class="updown_ex">
+                        <script>
+                        var plus = '+';
+                        var updown = '{{dict3.plus_minus}}';
+                                if( updown == plus) {
+                                document.getElementById('ns_up_down').src="../static/img/caret_upex.png";
+                                } else {
+                                document.getElementById('ns_up_down').src="../static/img/caret_downex.png";
+                                }
+                        </script>
+                        <span class="jisu-value-03">{{dict3.diff}}</span>
+                        <span class="jisu-value-01">({{dict3.plus_minus}}{{dict3.per}})</span>
+                </div>
+            </div>
+            <!-- Search 검색 기능-->
+            <p>
+            <form action="jongmok/" method="post" title="궁금하신 종목명을 검색해주세요 :)">
+            {% csrf_token %}
+            <img src="{% static 'img/icon.png' %}" class="search-icon" name="search-icon">
+                <input type="search" value="{{ search_key }}" class="_InputWithAddons"
+                       name="search_key" placeholder="관심 기업 검색">
+            </form>
+            </p>
+
+<!-- 다 만들어지고 삭제 예정 <div><br><br><br><br></div>&lt;!&ndash; 검색창과 top4 간격을 위해 &ndash;&gt;-->
+
+    <!-- ======메인 페이지 순위차트 만들기===== -->
+        <div class="Topclass-all-contain"> <!-- 순위차트 메인 컨테인 -->
+        <!-- 상승 종목 TOP4 -->
+            <div class="highT4-contain">
+                <div title="어제보다 상승률이 높은 종목 순위 !" class="highT4_title-box">
+                    <span class="highT4_title-text">상승 종목 TOP 4</span>
+                </div>
+                <div class="highT4-frame-group">
+                    <div class="highT4-frame-1"> <!-- top1 -->
+                        <div class="highT4-icon1"></div>
+                        <span class="highT4-value-1">{{df1.code_name.0}}</span><br>
+                        <img src="{% static 'img/caret_upex.png'%}" class="highT4UP">
+                        <span class="highT4-value-2">{{df1.percent.0}}</span>
+                    </div>
+                    <div class="highT4-frame-1"> <!-- top2 -->
+                        <div class="highT4-icon2"></div>
+                        <span class="highT4-value-1">{{df1.code_name.1}}</span><br>
+                        <img src="{% static 'img/caret_upex.png'%}" class="highT4UP">
+                        <span class="highT4-value-2">{{df1.percent.1}}</span>
+                    </div>
+                    <div class="highT4-frame-1"> <!-- top3 -->
+                        <div class="highT4-icon3"></div>
+                        <span class="highT4-value-1">{{df1.code_name.2}}</span><br>
+                        <img src="{% static 'img/caret_upex.png'%}" class="highT4UP">
+                        <span class="highT4-value-2">{{df1.percent.2}}</span>
+
+                    </div>
+                    <div class="highT4-frame-1"> <!-- top4 -->
+                        <div class="highT4-icon4"></div>
+                        <span class="highT4-value-1">{{df1.code_name.3}}</span><br>
+                        <img src="{% static 'img/caret_upex.png'%}" class="highT4UP">
+                        <span class="highT4-value-2">{{df1.percent.3}}</span>
+                    </div>
+                </div>
+            </div>
+
+        <!-- 하락 종목 TOP4 -->
+            <div class="lowT4-contain">
+                <div title="어제보다 하락률이 높은 종목 순위 !" class="lowT4_title-box">
+                    <span class="lowT4_title-text">하락 종목 TOP 4</span>
+                </div>
+                <div class="lowT4-frame-group">
+                    <div class="lowT4-frame-1"> <!-- top1 -->
+                        <div class="lowT4-icon1"></div>
+                        <span class="lowT4-value-1">{{df2.code_name.0}}</span><br>
+                        <img src="{% static 'img/caret_downex.png'%}" class="lowT4down">
+                        <span class="lowT4-value-2">{{df2.percent.0}}</span>
+                    </div>
+                    <div class="lowT4-frame-1"> <!-- top2 -->
+                        <div class="lowT4-icon2"></div>
+                        <span class="lowT4-value-1">{{df2.code_name.1}}</span><br>
+                        <img src="{% static 'img/caret_downex.png'%}" class="lowT4down">
+                        <span class="lowT4-value-2">{{df2.percent.1}}</span>
+                    </div>
+                    <div class="lowT4-frame-1"> <!-- top3 -->
+                        <div class="lowT4-icon3"></div>
+                        <span class="lowT4-value-1">{{df2.code_name.2}}</span><br>
+                        <img src="{% static 'img/caret_downex.png'%}" class="lowT4down">
+                        <span class="lowT4-value-2">{{df2.percent.2}}</span>
+
+                    </div>
+                    <div class="lowT4-frame-1"> <!-- top4 -->
+                        <div class="lowT4-icon4"></div>
+                        <span class="lowT4-value-1">{{df2.code_name.3}}</span><br>
+                        <img src="{% static 'img/caret_downex.png'%}" class="lowT4down">
+                        <span class="lowT4-value-2">{{df2.percent.3}}</span>
+                    </div>
+                </div>
+            </div>
+
+        <!-- 인기 종목 TOP5 -->
+            <div class="popT5-contain">
+                <div title="거래량 순위 :)"  class="popT5_title-box" >
+                    <span class="popT5_title-text">인기 종목 TOP 4</span>
+                </div>
+                <div class="popT5-frame-group">
+                    <div class="popT5-frame-1"> <!-- top1 -->
+                        <div class="popT5-icon1"></div>
+                        <span class="popT5-value-1">{{df3.code_name.0}}</span><br>
+                        <img src="{% static 'img/gag.png'%}" class="popT5down">
+                        <span class="popT5-value-2">{{df3.trading.0}}</span>
+                    </div>
+                    <div class="popT5-frame-1"> <!-- top2 -->
+                        <div class="popT5-icon2"></div>
+                        <span class="popT5-value-1">{{df3.code_name.1}}</span><br>
+                        <img src="{% static 'img/gag.png'%}" class="popT5down">
+                        <span class="popT5-value-2">{{df3.trading.1}}</span>
+                    </div>
+                    <div class="popT5-frame-1"> <!-- top3 -->
+                        <div class="popT5-icon3"></div>
+                        <span class="popT5-value-1">{{df3.code_name.2}}</span><br>
+                        <img src="{% static 'img/gag.png'%}" class="popT5down">
+                        <span class="popT5-value-2">{{df3.trading.2}}</span>
+                    </div>
+                    <div class="popT5-frame-1"> <!-- top4 -->
+                        <div class="popT5-icon4"></div>
+                        <span class="popT5-value-1">{{df3.code_name.3}}</span><br>
+                        <img src="{% static 'img/gag.png'%}" class="popT5down">
+                        <span class="popT5-value-2">{{df3.trading.3}}</span>
+                    </div>
+<!--                    <div class="popT5-frame-1"> &lt;!&ndash; top5 &ndash;&gt;-->
+<!--                        <div class="popT5-icon5"></div>-->
+<!--                        <span class="popT5-value-1">screat juju</span><br>-->
+<!--                        <img src="{% static 'img/caret_upex.png'%}" class="popT5down">-->
+<!--                        <span class="popT5-value-2">{{df3.trading.0}}</span>-->
+<!--                    </div>-->
+                </div>
+            </div>
+        </div> <!-- 순위차트 메인 컨테인 닫힘 -->
+
+
+<!--            &lt;!&ndash; 코스피200 차트 부분 &ndash;&gt;-->
+<!--            <div class="Frame-59">&lt;!&ndash; 수익 탑 4 &ndash;&gt;-->
+<!--            <p><span class="TOP4-true">상승 종목 TOP 4</span><span class="TOP4-false">하락 종목 TOP 4</span><span class="TOP4-pop">인기 종목 TOP 5</span></p>-->
+<!--                <div class="Frame-62">-->
+
+
+<!--                    <div class="Ellipse-top01-true"><span class="Ellipse-top01-text"> {{df1.code_name.0}}<br>&nbsp;{{df1.percent.0}}</span>-->
+<!--                        <div class="Ellipse-top02-true"><span class="Ellipse-top02-text">{{df1.code_name.1}}&nbsp;{{df1.percent.1}}<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;수익률</span>-->
+<!--                            <div class="Ellipse-top03-true"><span class="Ellipse-top03-text"> {{df1.code_name.2}}<br>&nbsp;{{df1.percent.2}}</span>-->
+<!--                                <div class="Ellipse-top04-true"><span class="Ellipse-top04-text">{{df1.code_name.3}}<br>&nbsp;{{df1.percent.3}}</span>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="Frame-61">&lt;!&ndash; 하락 탑 4 &ndash;&gt;-->
+<!--                    <div class="Ellipse-top01-false"><span class="Ellipse-top01-text-false"><br>&nbsp;&nbsp;{{df2.code_name.0}}<br>&nbsp;&nbsp;&nbsp;{{df2.percent.0}}</span>-->
+<!--                        <div class="Ellipse-top02-false"><span class="Ellipse-top02-text-false">{{df2.code_name.1}}<br>&nbsp;{{df2.percent.1}}</span>-->
+<!--                            <div class="Ellipse-top03-false"><span class="Ellipse-top03-text-false">{{df2.code_name.2}}<br>&nbsp;{{df2.percent.2}}</span>-->
+<!--                                <div class="Ellipse-top04-false"><span class="Ellipse-top04-text-false">{{df2.code_name.3}}<br>&nbsp;{{df2.percent.3}}</span>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="Frame-68">&lt;!&ndash; 인기 종목 탑 5 &ndash;&gt;-->
+<!--                    <div class="Ellipse-top01-pop"><span class="Ellipse-top01-text-pop">{{df3.code_name.0}}<br>&nbsp;&nbsp;&nbsp;{{df3.trading.0}}</span>-->
+<!--                        <div class="Ellipse-top02-pop"><span class="Ellipse-top02-text-pop">{{df3.code_name.1}}<br>&nbsp;{{df3.trading.1}}</span>-->
+<!--                            <div class="Ellipse-top03-pop"><span class="Ellipse-top03-text-pop">{{df3.code_name.2}}<br>&nbsp;{{df3.trading.2}}</span>-->
+<!--                                <div class="Ellipse-top04-pop"><span class="Ellipse-top04-text-pop">{{df3.code_name.3}}<br>&nbsp;{{df3.trading.3}}</span>-->
+<!--                                    <div class="Ellipse-top05-pop"><span class="Ellipse-top04-text-pop">{{df3.code_name.4}}<br>&nbsp;{{df3.trading.4}}</span>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--        </div>-->
+
+
+
+    <!-- JS -->
+    <script src="{% static 'main.js' %}"></script>
+
+    </body>
+</html>
+

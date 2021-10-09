@@ -1,0 +1,787 @@
+{% load static %}
+{{ post_list }}
+<link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+<tr>
+    <table class="table">
+    <thead>
+        <tr>
+            <th scope = "col">#</th>
+            <th scope = "col">number</th>
+            <th scope = "col">name</th>
+        </tr>
+    </thead>
+    <body>
+{% for db_jisu in object_list %}
+            <tr>
+                <td>{{forloop.counter}}</td>
+                <td><a href="{{db_jisu.stock_code}}" target="_blank">{{db_jisu.stock_code}}</a></td>
+                <td><a href="{{db_jisu.stock_name}}" target="_blank">{{db_jisu.stock_name}}</a></td>
+
+            </tr>
+
+<td>{{db_jisu.stock_name }}</td><br>
+<td>{{ qs.id }}</td><br>
+    <td>{{ qs.stock_code}}</td><br>
+
+</tr>
+
+<from action="" method="get">
+    <input type="text" name="q" value="{{q}}"/>
+    <input type="submit" value="검색"/>
+</from>
+
+        {% endfor %}
+
+
+<script language="javascript">
+        function logo_info() {
+            var dict1_per = <%=dict1.per%>;
+            var img_src;
+             if(dict1_per >= 0) {
+                img_src = '../static/img/'up_logo.png';
+                }
+            return img_src;
+        }
+</script>
+
+<div>
+   <img id="logo" src="">
+       <script>document.getElementById('logo').src=logo_info()</script>
+
+ </div>
+
+<tr onMouseOver="mouseOver(this)" onMouseOut="mouseOut(this)">
+     <td align="center"><span class="tah p10 gray03">2019.01.17</span></td>
+     <td class="num"><span class="tah p11">64,900</span></td>
+     <td class="num">
+    <img src="https://ssl.pstatic.net/imgstock/images/images4/ico_up.gif" width="7" height="6" style="margin-right:4px;" alt="상승"><span class="tah p11 red02">
+    100
+    </span>
+   </td>
+     <td class="num"><span class="tah p11">65,500</span></td>
+     <td class="num"><span class="tah p11">66,200</span></td>
+     <td class="num"><span class="tah p11">64,600</span></td>
+     <td class="num"><span class="tah p11">2,830,122</span></td>
+     </tr>
+
+
+<!--function changeImage() {-->
+<!--  var image = document.getElementById("dog1");-->
+<!--  if ((dict1.plus_minus) == '+') {-->
+<!--    image.src = "../static/img/caret_up.PNG";-->
+<!--  } else {-->
+<!--    image.src = "../static/img/caret_down.PNG";-->
+<!--  }-->
+<!--}-->
+
+
+<div>
+   <img id="logo" src="">
+       <script>document.getElementById('logo').src=logo_info()</script>
+ </div>
+    <!-- JS -->
+    <script src="{% static 'main.js' %}"></script>
+
+
+
+    <!-- 멘토링 질문 -->
+    <script language="javascript">
+            function logo_info() {
+                var img_src;
+                    if(dict1.plus_minus == '+') {
+                    img_src = "{% static 'img/up_log.png' %}";
+                    } else {
+                    img_src = "{% static 'img/down_log.png' %}";
+                    }
+                }
+                return img_src;
+            }
+    </script>
+    <div>
+       <img id="logo" src="">
+           <script>document.getElementById('logo').src=logo_info()</script>
+    </div>
+
+                <img src="" id="up_down_img"></img>
+                    <script>
+                    a = {{dict1.plus_minus}}
+                    function changeImage(a) {
+                        document.getElementById("up_down_img").src=a.src;
+                    }
+                    function changeImage(img) {
+                        document.getElementById("up_down_img").src = img.src.replace("caret_");
+                     }
+                    alert(up_down_img)
+                    </script>
+
+
+                    <script>
+                    function () {
+                            if({{dict1.plus_minus}} == +) {
+                            document.getElementById('up_down_img').src="{% static 'img/caret_up.png' %}";
+                            } else {
+                            document.getElementById('up_down_img').src="{% static 'img/caret_down.png' %}";
+                            }
+                        }
+                    </script>
+
+<!--                    <div class="tab_content_jm">-->
+<!--                        <input type="radio" name="tabmenu3" id="tab001" checked>-->
+<!--                        <label for="tab001" class="tab-title3">1일</label>-->
+
+<!--                        <input type="radio" name="tabmenu3" id="tab002">-->
+<!--                        <label for="tab002" class="tab-title3">1주일</label>-->
+
+<!--                        <input type="radio" name="tabmenu3" id="tab003">-->
+<!--                        <label for="tab003" class="tab-title3">1개월</label>-->
+
+<!--                        <input type="radio" name="tabmenu3" id="tab004">-->
+<!--                        <label for="tab004" class="tab-title3">3개월</label>-->
+
+<!--                        <input type="radio" name="tabmenu3" id="tab005">-->
+<!--                        <label for="tab005" class="tab-title3">1년</label>-->
+
+<!--                        <div class="boxx con001">1일 들어갈자리</div>-->
+<!--                        <div class="boxx con002">1주일 들어갈자리</div>-->
+<!--                        <div class="boxx con003">1개월 들어갈자리</div>-->
+<!--                        <div class="boxx con004">3개월 들어갈자리</div>-->
+<!--                        <div class="boxx con005">1년 들어갈자리</div>-->
+
+<!--                        </div>-->
+
+
+<style>
+* {margin:0;padding:px;border:0;}
+/*.tab_content_jm {position:absolute; /* 박스 안에 넣어서 현재 주석처리함_2021-10-02
+margin:280px 0px 0px 580px; /* 위치 설정 */
+/*transform:translate(-50%,-50%);}/* 해당 컨텐츠 내용 박스
+
+input[type="radio"] {display:none;} /* 라디오 체크박스 안나오게 none */
+
+.tab-title3 {display:inline-block;padding:7px 24px 7px 24px; /* 공통 라디오 버튼 css */
+background:#fff;color:#737272;font-size:14px;cursor:pointer;
+border-radius:10px;font-family: NanumSquareRound;font-weight: bold;}
+
+input[type="radio"]:checked + .tab-title3 {background:#eaeaea;color:#737272;
+box-shadow: 0 2px 2.5px 0 rgba(140, 140, 140, 0.5);} /* 체크 된 박스 css */
+
+.boxx {width:520px;height:390px;background:#aaa;margin:0 auto; /* 전체 컨텐츠 박스 css */
+padding: 5px 0px 5px 15px;display:none;border:solid 2px #dedcdc;
+border-radius:0px 5px 5px 5px;background:#fff;}
+
+input[id="tab001"]:checked ~ .con001 {display:block;}
+input[id="tab002"]:checked ~ .con002 {display:block;}
+input[id="tab003"]:checked ~ .con003 {display:block;}
+input[id="tab004"]:checked ~ .con004 {display:block;}
+input[id="tab005"]:checked ~ .con005 {display:block;}
+</style>
+
+
+        <div class="Frame-bubble-box">
+                <div class="main-bubble-box-1">
+                    <div class="high-first"></div>
+                    <div class="high-sec"></div>
+                    <div class="high-thr"></div>
+                    <div class="high-four"></div>
+                </div>
+
+                <div class="main-bubble-box-2">
+                    <div class="low-first"></div>
+                    <div class="low-sec"></div>
+                    <div class="low-thr"></div>
+                    <div class="low-four"></div>
+                </div>
+
+                <div class="main-bubble-box-3">
+                    <div class="popul-first"></div>
+                    <div class="popul-sec"></div>
+                    <div class="popul-thr"></div>
+                    <div class="popul-four"></div>
+                    <div class="populfive"></div>
+                </div>
+
+            </div>
+
+
+
+
+.Frame-bubble-box {
+  width: 1110px;
+  height: 433px;
+  margin: 92px 0 0;
+  padding: 0 10px 0 7px;
+}
+.main-bubble-box-1 {
+  width: 240px;
+  height: 331px;
+  margin: 5px 224px 97px 0;
+  background-color: #4b62d9;
+}
+.main-bubble-box-2 {
+  width: 167px;
+  height: 433px;
+  margin: -428px 228px 0 450px;
+  background-color: #4b62d9;
+}
+.main-bubble-box-3 {
+  width: 234px;
+  height: 377px;
+  flex-grow: 0;
+  margin: -433px 0 54px 850px;
+  background-color: #4b62d9;
+}
+
+.high-first {
+  width: 140px;
+  height: 140px;
+  flex-grow: 0;
+  margin: 0px 0px 0px 0px;
+  padding: 0px 0px 0px 0px;
+  background-color: #e14141;
+  position:absolute;
+  border-radius: 100px;
+}
+.high-sec {
+  width: 110px;
+  height: 110px;
+  flex-grow: 0;
+  margin: 0px 0px 0px 0px;
+  padding: 0px 0px 0px 0px;
+  background-color: #f26161;
+  position:absolute;
+  border-radius: 100px;
+}
+.high-thr {
+  width: 90px;
+  height: 90px;
+  flex-grow: 0;
+  margin: 0px 0px 0px 0px;
+  padding: 0px 0px 0px 0px;
+  background-color: #fc8a8a;
+  position:absolute;
+  border-radius: 100px;
+}
+.high-four {
+  width: 80px;
+  height: 80px;
+  flex-grow: 0;
+  margin: 0px 0px 0px 0px;
+  padding: 0px 0px 0px 0px;
+  background-color: #fec5c5;
+  position:absolute;
+  border-radius: 100px;
+}
+
+.low-first {
+ width: 100px;
+  height: 100px;
+  flex-grow: 0;
+  background-color: #4b62d9;
+  margin: 0px 0px 0px 0px;
+  padding: 0px 0px 0px 0px;
+  position:absolute;
+  border-radius: 100px;
+}
+.low-sec {
+  width: 80px;
+  height: 80px;
+  flex-grow: 0;
+  margin: 0px 0px 0px 0px;
+  padding: 0px 0px 0px 0px;
+  background-color: #6d83f3;
+  position:absolute;
+  border-radius: 100px;
+}
+.low-thr {
+  width: 70px;
+  height: 70px;
+  flex-grow: 0;
+  margin: 0px 0px 0px 0px;
+  padding: 0px 0px 0px 0px;
+  background-color: #8f9ff6;
+  position:absolute;
+  border-radius: 100px;
+}
+.low-four {
+  width: 55px;
+  height: 55px;
+  flex-grow: 0;
+  margin: 0px 0px 0px 0px;
+  padding: 0px 0px 0px 0px;
+  background-color: #8f9ff6;
+  position:absolute;
+  border-radius: 100px;
+}
+
+.popul-first {
+  width: 140px;
+  height: 140px;
+  flex-grow: 0;
+  background-color: #4a2f73;
+  margin: 0px 0px 0px 0px;
+  padding: 0px 0px 0px 0px;
+  position:absolute;
+  border-radius: 100px;
+}
+.popul-sec {
+  width: 110px;
+  height: 110px;
+  flex-grow: 0;
+  margin: 0px 0px 0px 0px;
+  padding: 0px 0px 0px 0px;
+  background-color: #684898;
+  position:absolute;
+  border-radius: 100px;
+}
+.popul-thr {
+  width: 90px;
+  height: 90px;
+  flex-grow: 0;
+  margin: 0px 0px 0px 0px;
+  padding: 0px 0px 0px 0px;
+  background-color: #8966bf;
+  position:absolute;
+  border-radius: 100px;
+}
+.popul-four {
+  width: 80px;
+  height: 80px;
+  flex-grow: 0;
+  margin: 0px 0px 0px 0px;
+  padding: 0px 0px 0px 0px;
+  background-color: #9e87bb;
+
+  border-radius: 100px;
+}
+.popul-five {
+  width: 70px;
+  height: 70px;
+  flex-grow: 0;
+  margin: 0px 0px 0px 200px;
+  padding: 0px 0px 0px 0px;
+  background-color: #b09ad1;
+  border-radius: 100px;
+  width:auto
+}
+
+
+
+                var searchInputClick = ('search_input').find('a');
+searchInputClick.on('click', searchText );
+var searchInput = ('search_input').find('input');
+searchInput.keyup(function(e){
+if(e.keyCode == 13) {        // 웹에서 엔터쳤을때
+          searchText( );
+     }
+});
+
+function searchText( e ){
+     var thisText = ('aside .menu_box .search .search_input input').val();  // 검색한 단어
+     if( thisText == '' ){
+           ('aside .menu_box .search .search_input input').val('').blur();    //blur 처리하여 모바일에서 인풋 포커스 없애서 키패드 감추기
+           alert('검색어가 없습니다.');
+      } else {
+            window.location.href = (이동시킬도메인 + "http://localhost:8000/juju/jongmok/search_list.asp?q=" + encodeURIComponent(thisText));                                                                //이동시킬 페이지                     //encodeURIComponent로 변환하여 넘기기
+      }
+}
+
+
+
+
+      <script>
+                                var aday= document.getElementById("tab_aday");
+                                var aweek= document.getElementById("tab_aweek");
+
+                                var uown = {{diff}}
+
+                                var resultV= document.getElementById("tab_result");
+
+                                aday.oneclick=function() {
+                                document.write("resultV").text="dd"
+                                };
+
+
+
+
+                            </script>
+
+ <script> 내용은 바뀜
+                                var aday= document.getElementById("tab_aday");
+                                var aweek= document.getElementById("tab_aweek");
+                                var resultV= document.getElementById("tab_result");
+
+                                if(aweek==aweek) {
+                                document.getElementById("tab_result").innerText = {{diff}};
+                                } else if (amonth==amonth) {
+                                document.getElementById("tab_result").innerText = "흐흫흐흐";
+                                } else {}
+
+
+
+
+                            </script>
+
+
+
+def jm_list(request):
+    jm_list = code_name.abjects.all()
+    qs = stock_info.objects.all()
+    q = request.GET.get('q','')
+    if q == qs :
+        return render(request,'main/jongmok.html',{
+            'q':q,
+            'qs':qs
+})
+
+
+                    <script>
+                search_value.keyup(function(e){
+                if(e.keyCode == 13) {        // 웹에서 엔터쳤을때
+          searchText( );
+     };
+                var value="{{ q }}";
+                if( value == "{{code_name}}";
+                    window.location.href = (이동시킬도메인 + "http://localhost:8000/juju/jongmok/?q=" + encodeURIComponent(value));
+                    else{ ser=''};
+            </script>
+
+
+
+
+
+<div class="bubbleChart"/>
+            <script>
+
+                $(document).ready(function () {
+  var bubbleChart = new d3.svg.BubbleChart({
+    supportResponsive: true,
+    //container: => use @default
+    size: 500,
+    //viewBoxSize: => use @default
+    innerRadius: 500 / 3.5,
+    //outerRadius: => use @default
+    radiusMin: 50,
+    //radiusMax: use @default
+    //intersectDelta: use @default
+    //intersectInc: use @default
+    //circleColor: use @default
+    data: {
+      items: [
+        {text: "Java", count: "236"},
+        {text: ".Net", count: "382"},
+        {text: "Php", count: "170"},
+        {text: "Ruby", count: "123"},
+        {text: "D", count: "12"},
+      ],
+      eval: function (item) {return item.count;},
+      classed: function (item) {return item.text.split(" ").join("");}
+    },
+    plugins: [
+      {
+        name: "central-click",
+        options: {
+          text: "(See more detail)",
+          style: {
+            "font-size": "12px",
+            "font-style": "italic",
+            "font-family": "Source Sans Pro, sans-serif",
+            //"font-weight": "700",
+            "text-anchor": "middle",
+            "fill": "white"
+          },
+          attr: {dy: "65px"},
+          centralClick: function() {
+            alert("Here is more details!!");
+          }
+        }
+      },
+      {
+        name: "lines",
+        options: {
+          format: [
+            {// Line #0
+              textField: "count",
+              classed: {count: true},
+              style: {
+                "font-size": "28px",
+                "font-family": "Source Sans Pro, sans-serif",
+                "text-anchor": "middle",
+                fill: "white"
+              },
+              attr: {
+                dy: "0px",
+                x: function (d) {return d.cx;},
+                y: function (d) {return d.cy;}
+              }
+            },
+            {// Line #1
+              textField: "text",
+              classed: {text: true},
+              style: {
+                "font-size": "14px",
+                "font-family": "Source Sans Pro, sans-serif",
+                "text-anchor": "middle",
+                fill: "white"
+              },
+              attr: {
+                dy: "20px",
+                x: function (d) {return d.cx;},
+                y: function (d) {return d.cy;}
+              }
+            }
+          ],
+          centralFormat: [
+            {// Line #0
+              style: {"font-size": "50px"},
+              attr: {}
+            },
+            {// Line #1
+              style: {"font-size": "30px"},
+              attr: {dy: "40px"}
+            }
+          ]
+        }
+      }]
+  });
+});
+
+            </script>
+
+<div class="bubbleChart02"/>
+
+<script>
+
+                $(document).ready(function () {
+  var bubbleChart02 = new d3.svg.BubbleChart({
+    supportResponsive: true,
+    //container: => use @default
+    size: 500,
+    //viewBoxSize: => use @default
+    innerRadius: 500 / 3.5,
+    //outerRadius: => use @default
+    radiusMin: 50,
+    //radiusMax: use @default
+    //intersectDelta: use @default
+    //intersectInc: use @default
+    //circleColor: use @default
+    data: {
+      items: [
+        {text: "Java", count: "236"},
+        {text: ".Net", count: "382"},
+        {text: "Php", count: "170"},
+        {text: "Ruby", count: "123"},
+        {text: "D", count: "12"},
+      ],
+      eval: function (item) {return item.count;},
+      classed: function (item) {return item.text.split(" ").join("");}
+    },
+    plugins: [
+      {
+        name: "central-click",
+        options: {
+          text: "(See more detail)",
+          style: {
+            "font-size": "12px",
+            "font-style": "italic",
+            "font-family": "Source Sans Pro, sans-serif",
+            //"font-weight": "700",
+            "text-anchor": "middle",
+            "fill": "white"
+          },
+          attr: {dy: "65px"},
+          centralClick: function() {
+            alert("Here is more details!!");
+          }
+        }
+      },
+      {
+        name: "lines",
+        options: {
+          format: [
+            {// Line #0
+              textField: "count",
+              classed: {count: true},
+              style: {
+                "font-size": "28px",
+                "font-family": "Source Sans Pro, sans-serif",
+                "text-anchor": "middle",
+                fill: "white"
+              },
+              attr: {
+                dy: "0px",
+                x: function (d) {return d.cx;},
+                y: function (d) {return d.cy;}
+              }
+            },
+            {// Line #1
+              textField: "text",
+              classed: {text: true},
+              style: {
+                "font-size": "14px",
+                "font-family": "Source Sans Pro, sans-serif",
+                "text-anchor": "middle",
+                fill: "white"
+              },
+              attr: {
+                dy: "20px",
+                x: function (d) {return d.cx;},
+                y: function (d) {return d.cy;}
+              }
+            }
+          ],
+          centralFormat: [
+            {// Line #0
+              style: {"font-size": "50px"},
+              attr: {}
+            },
+            {// Line #1
+              style: {"font-size": "30px"},
+              attr: {dy: "40px"}
+            }
+          ]
+        }
+      }]
+  });
+});
+
+            </script>
+
+<div class="bubbleChart03"/>
+
+<script>
+
+                $(document).ready(function () {
+  var bubbleChart03 = new d3.svg.BubbleChart({
+    supportResponsive: true,
+    //container: => use @default
+    size: 500,
+    //viewBoxSize: => use @default
+    innerRadius: 500 / 3.5,
+    //outerRadius: => use @default
+    radiusMin: 50,
+    //radiusMax: use @default
+    //intersectDelta: use @default
+    //intersectInc: use @default
+    //circleColor: use @default
+    data: {
+      items: [
+        {text: "Java", count: "236"},
+        {text: "sk", count: "14"},
+        {text: "삼양식품", count: "6689"},
+        {text: "lg전자", count: "8888"},
+        {text: "D", count: "12"},
+      ],
+      eval: function (item) {return item.count;},
+      classed: function (item) {return item.text.split(" ").join("");}
+    },
+    plugins: [
+      {
+        name: "central-click",
+        options: {
+          text: "(See more detail)",
+          style: {
+            "font-size": "12px",
+            "font-style": "italic",
+            "font-family": "Source Sans Pro, sans-serif",
+            //"font-weight": "700",
+            "text-anchor": "middle",
+            "fill": "white"
+          },
+          attr: {dy: "65px"},
+          centralClick: function() {
+            alert("Here is more details!!");
+          }
+        }
+      },
+      {
+        name: "lines",
+        options: {
+          format: [
+            {// Line #0
+              textField: "count",
+              classed: {count: true},
+              style: {
+                "font-size": "28px",
+                "font-family": "Source Sans Pro, sans-serif",
+                "text-anchor": "middle",
+                fill: "white"
+              },
+              attr: {
+                dy: "0px",
+                x: function (d) {return d.cx;},
+                y: function (d) {return d.cy;}
+              }
+            },
+            {// Line #1
+              textField: "text",
+              classed: {text: true},
+              style: {
+                "font-size": "14px",
+                "font-family": "Source Sans Pro, sans-serif",
+                "text-anchor": "middle",
+                fill: "white"
+              },
+              attr: {
+                dy: "20px",
+                x: function (d) {return d.cx;},
+                y: function (d) {return d.cy;}
+              }
+            }
+          ],
+          centralFormat: [
+            {// Line #0
+              style: {"font-size": "50px"},
+              attr: {}
+            },
+            {// Line #1
+              style: {"font-size": "30px"},
+              attr: {dy: "40px"}
+            }
+          ]
+        }
+      }]
+  });
+});
+
+            </script>
+
+
+    <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600,200italic,600italic&subset=latin,vietnamese' rel='stylesheet' type='text/css'>
+
+  <script src="http://phuonghuynh.github.io/js/bower_components/jquery/dist/jquery.min.js"></script>
+  <script src="http://phuonghuynh.github.io/js/bower_components/d3/d3.min.js"></script>
+  <script src="http://phuonghuynh.github.io/js/bower_components/d3-transform/src/d3-transform.js"></script>
+  <script src="http://phuonghuynh.github.io/js/bower_components/cafej/src/extarray.js"></script>
+  <script src="http://phuonghuynh.github.io/js/bower_components/cafej/src/misc.js"></script>
+  <script src="http://phuonghuynh.github.io/js/bower_components/cafej/src/micro-observer.js"></script>
+  <script src="http://phuonghuynh.github.io/js/bower_components/microplugin/src/microplugin.js"></script>
+  <script src="http://phuonghuynh.github.io/js/bower_components/bubble-chart/src/bubble-chart.js"></script>
+  <script src="http://phuonghuynh.github.io/js/bower_components/bubble-chart/src/plugins/central-click/central-click.js"></script>
+  <script src="http://phuonghuynh.github.io/js/bower_components/bubble-chart/src/plugins/lines/lines.js"></script>
+<!--  <script src="in.js"></script>-->
+
+
+  <style>
+    .bubbleChart {
+      min-width: 100px;
+      max-width: 300px;
+      height: 300px;
+      margin: 0 auto;
+    }
+    .bubbleChart svg{
+      background: #fff;
+    }
+    .bubbleChart02 {
+      min-width: 80px;
+      max-width: 200px;
+      height: 100px;
+      margin: 0 auto;
+    }
+    .bubbleChart03 {
+      min-width: 150px;
+      max-width: 230px;
+      height: 100px;
+      margin: 0 auto;
+    }
+  </style>
+
